@@ -1,28 +1,25 @@
 #lang racket
-(define (my-add a b c) (+ a b c))
+(define (add a b c) (+ a b c))
 
-(define (my-subtract a b c) (+ a (- b c)))
+(define (subtract a b c) (+ a (- b c)))
 
 ;; A test case
-(struct case (myfn solnfn args))
+(struct case (myfn args expect))
 
 ;; Result of a test case
 (struct result (case passed))
 
-;; Assert with CHECK that the two input functions, MYFN and SOLNFN,
-;; return the same value when applied to ARGS
-(define (assert check myfn solnfn args)
-  (check (apply myfn args) (apply solnfn args)))
+(define (assert check myfn args expect)
+  (check (apply myfn args) expect))
 
-;; Call ASSERT with CHECK equal to EQ?
-(define (assert-eq? myfn solnfn args)
-  (assert eq? myfn solnfn args))
+(define (assert-eq? myfn args expect)
+  (assert eq? myfn args expect))
 
 ;; Run a given test case
 (define (test a-case)
-  (result a-case (assert-eq? (case-myfn a-case) (case-solnfn a-case) (case-args a-case))))
+  (result a-case (assert-eq? (case-myfn a-case) (case-args a-case) (case-expect a-case))))
 
-;; Run a list of test cases
+;; Run a list of test cases and return a list of their results
 (define (test-suite tests)
   (map test tests))
 
@@ -41,9 +38,15 @@
                    [else
                     (let* ([a-case (result-case a-result)]
                            [myfn-name (object-name (case-myfn a-case))]
-                           [args (case-args a-case)])
+                           [args-str (anylist->string (case-args a-case))]
+                           [my-result (apply (case-myfn a-case) (case-args a-case))]
+                           [expected (case-expect a-case)])
                       ;; Print info from test
-                      (printf "Failed: ~a ~a~n" myfn-name (case-args a-case))
+                      (printf "Failed: (~a ~a) => ~a (Solution: ~a)~n"
+                              myfn-name
+                              args-str
+                              my-result
+                              expected)
                       ;; Increment failed counter
                       (list (first results) (+ 1 (second results))))]))
                '(0 0)
@@ -60,12 +63,16 @@
             failed
             percent-correct)))
 
+;; Helper to convert a list of any type into a string
+(define (anylist->string lst)
+  (string-join (map ~a lst) " "))
+
 (print-results
- (test-suite (list (case my-subtract - '(1 2 3))
-                   (case my-subtract - '(0 0 0))
-                   (case my-subtract - '(-1 1 -1))
-                   (case my-subtract - '(0 0 1))
-                   (case my-add + '(1 2 3))
-                   (case my-add + '(0 0 0))
-                   (case my-add + '(-1 1 -1))
-                   (case my-add + '(0 0 1)))))
+ (test-suite (list (case subtract '(1 2 3) -4)
+                   (case subtract '(0 0 0) 0)
+                   (case subtract '(-1 1 -1) -1)
+                   (case subtract '(0 0 1) -1)
+                   (case add '(1 2 3) 6)
+                   (case add '(0 0 0) 0)
+                   (case add '(-1 1 -1) -1)
+                   (case add '(0 0 1) 1))))
