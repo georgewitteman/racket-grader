@@ -1,4 +1,4 @@
-#lang racket
-(define (my-add a b) (+ a b))
 
-(define (my-subtract a b) (+ a b))
+(define (add a b c) (+ a b c))
+
+(define (subtract a b c) (+ a (- b c)))
