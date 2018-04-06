@@ -1,4 +1,6 @@
-
+#! /usr/bin/env racket
+#lang racket
+(require racket/include)
 
 (define grade
   (lambda (name pts func args soln)
@@ -13,9 +15,8 @@
          pts)
         ;; O/w print what went wrong and return 0 points
         (else
-         (printf "ERR: ~A,~A --> ~A (~A)" fn-name args-str results soln)
+         (printf "~A - ERROR: ~A,~A --> ~A (~A)~%"name fn-name args-str results soln)
          0)
-        )
-      )
-    )
-  )
+        ))))
+
+
