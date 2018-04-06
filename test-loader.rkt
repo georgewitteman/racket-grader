@@ -1,5 +1,3 @@
-#lang racket/load
-
 (load "lib.rkt")
 (define asmt-regex #rx"-asmt0.rkt$")
 
