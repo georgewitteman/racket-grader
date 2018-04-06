@@ -1,0 +1,19 @@
+
+
+(define grade
+  (lambda (name pts func args soln)
+    ;; Save the students solution
+    (let* ([results (apply func args)]
+           [fn-name (object-name func)]
+           [args-str (string-join
+                      (map ~a args) " ")])
+      (cond
+        ((equal? results soln)
+         pts)
+        (else
+         (printf "ERR: ~A,~A --> ~A (~A)" fn-name args-str results soln)
+         0)
+        )
+      )
+    )
+  )
