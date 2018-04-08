@@ -1,7 +1,3 @@
-#! /usr/bin/env racket
-#lang racket
-(require racket/include)
-
 (define grade
   (lambda (name pts func args soln)
     ;; Save the students solution
