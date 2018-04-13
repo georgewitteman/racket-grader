@@ -1,20 +1,15 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 
-;(define to-String
-;  (lambda (datum)
-;    datum
-;     ))
-;
-;(define string-join
-;  (lambda (listy)
-;    (apply string-append (map  listy))))
+(define to-String
+  (lambda (datum)
+    (object->string datum)
+     ))
 
-=======
->>>>>>> 363ca1aff1cdd26d8c602c55331dc7888740717d
-=======
->>>>>>> 363ca1aff1cdd26d8c602c55331dc7888740717d
+(define string-join
+  (lambda (listy)
+    (apply string-append (map to-String listy))))
+
+
 (define grade
   (lambda (name pts func args soln)
     ;; Save the students solution
