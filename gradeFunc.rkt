@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 ;(define to-String
@@ -10,6 +11,8 @@
 ;  (lambda (listy)
 ;    (apply string-append (map  listy))))
 
+=======
+>>>>>>> 363ca1aff1cdd26d8c602c55331dc7888740717d
 =======
 >>>>>>> 363ca1aff1cdd26d8c602c55331dc7888740717d
 (define grade
