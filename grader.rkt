@@ -3,9 +3,9 @@
 ;; MAX: Max points student could have received
 ;; PTS: Points the student received
 ;; MSG: An optional error message
-(define-struct result (name max pts msg))
+(define-struct result (question name max pts msg))
 
-(define-struct test (name max func))
+(define-struct test (question name max func))
 
 (define assert-eq?
   (lambda (v1 v2)
@@ -15,29 +15,27 @@
 
 (define run-test
   (lambda (testy)
-    (let ([resulty (make-result
-                    (test-name testy)
-                    (test-max testy)
-                    0
-                    empty)])
-      (with-handlers
-          ([exn:fail?
-            (lambda (exn)
-              (make-result
-               (test-name testy)
-               (test-max testy)
-               0
-               (exn-message exn)))])
-        ((test-func testy))
-        (make-result
-         (test-name testy)
-         (test-max testy)
-         (test-max testy)
-         empty)))))
+    (with-handlers
+        ([exn:fail?
+          (lambda (exn)
+            (make-result
+             (test-question testy)
+             (test-name testy)
+             (test-max testy)
+             0
+             (exn-message exn)))])
+      ((test-func testy))
+      (make-result
+       (test-question testy)
+       (test-name testy)
+       (test-max testy)
+       (test-max testy)
+       empty))))
 
 (define print-result
   (lambda (res)
-    (printf "~A (~A/~A)~A~n"
+    (printf "~A: ~A (~A/~A)~A~n"
+            (result-question res)
             (result-name res)
             (result-pts res)
             (result-max res)
