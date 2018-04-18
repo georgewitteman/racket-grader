@@ -14,5 +14,3 @@
     (lambda ()
       (assert-eq? (+ 1 1) 2)))
    ))
-
-;; SET ALL function names to void b4 loading in next file

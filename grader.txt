@@ -97,6 +97,18 @@
         #t
         (error "assert-string? fail"))))
 
+(define assert-integer?
+  (lambda (x)
+    (if (string? x)
+        #t
+        (error "assert-integer? fail"))))
+
+(define assert-cons?
+  (lambda (x)
+    (if (cons? x)
+        #t
+        (error "assert-cons? fail"))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;-------------------------------;;
