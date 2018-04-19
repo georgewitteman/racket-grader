@@ -7,9 +7,11 @@
 
 (define-struct test (question name max func))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;----------ASSERTS-----------;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define-struct asmt (number class date list-o-tests))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;-------------ASSERTS--------------;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 (define assert-eq?
@@ -97,18 +99,6 @@
         #t
         (error "assert-string? fail"))))
 
-(define assert-integer?
-  (lambda (x)
-    (if (string? x)
-        #t
-        (error "assert-integer? fail"))))
-
-(define assert-cons?
-  (lambda (x)
-    (if (cons? x)
-        #t
-        (error "assert-cons? fail"))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;-------------------------------;;
@@ -135,16 +125,41 @@
        (test-max testy)
        empty))))
 
+
+
+
+;;(define print-result
+  ;;(lambda (res)
+    ;;(printf "~A: ~A (~A/~A)~A~n"
+     ;;       (result-question res)
+       ;;     (result-name res)
+         ;;   (result-pts res)
+           ;; (result-max res)
+           ;; (if (empty? (result-msg res))
+             ;;   ""
+              ;;  (string-append ": " (result-msg res))))))
+(define asmt-1 (make-asmt "ASMT-1" "CMPU-101" "4/18/2018" '(1 2 3 4)))
+
 (define print-result
-  (lambda (res)
-    (printf "~A: ~A (~A/~A)~A~n"
-            (result-question res)
-            (result-name res)
-            (result-pts res)
-            (result-max res)
-            (if (empty? (result-msg res))
-                ""
-                (string-append ": " (result-msg res))))))
+  (lambda (student-name my-asmt)
+    (printf "-------------------~nSTUDENT: ~A~n" student-name)
+    (printf "ASMT-INFO: ~A, ~A, DATE: ~A ~n" (asmt-number my-asmt) (asmt-class my-asmt) (asmt-date my-asmt))
+    (printf "-------------------")
+    (let* ([listy (asmt-list-o-tests my-asmt)]
+           [length-listy (- (length listy) 1)])
+      (dotimes (i length-listy)
+            (let* ([cur-test (list-ref listy i)]
+                   [test-name (test-name cur-test)]
+                   [points-per-case (test-points-per-case cur-test)]
+                   [func-name (test-function-name cur-test)]
+                   [input-list (test-list-o-inputs cur-test)]
+                   [soln-func (test-soln-func cur-test)])
+              
+              (printf "hey")
+              )   
+          )
+      )
+    ))
 
 ;; Main function that grades all the assignments
 ;; Searches through the current directory for all files of the
@@ -168,3 +183,5 @@
          (regexp (string-append "-" asmt-name ".rkt"))
          file))
       (directory-list ".")))))
+
+;;-----------------------------------------------------;;
