@@ -21,15 +21,24 @@
 ;; POINTS-PER-CASE: Number, points received per correct result
 ;; FUNC-NAME: Symbol, name of test as it will be in students files
 ;; LIST-O-INPUTS: List, a list of lists containing the inputs for each trial
-;; SOLN-FUNC: Symbol, func defined to give correct solns
+;; SOLN-FUNCTION: Symbol, func defined to give correct solns
 (define-struct test (name-of-test
                      points-per-case
                      func-name
                      list-o-inputs
                      soln-function))
 
+;; STRUCT: ASMT
+;;------------
+;; NUMBER: A string, the asmt number, such as "ASMT 1"
+;; CLASS: A string, the class the asmt if for, such as "CMPU 101"
+;; DATE: A string, the current date
+;; LIST-O-TESTS: A list, list of tests for the asmt
 (define-struct asmt (number class date list-o-tests))
 
+;;; SUMLIST
+;;;--------
+;;; function that returns the sum of elements in a list
 (define sumlist
   (lambda (listy)
     (if (null? listy)
@@ -154,7 +163,9 @@
        empty))))
 
 
-;;; Print result for a series of tests for one question
+;;; PRINT-RESULT
+;;;-------------
+;;; prints result for one test, over possibly multiple inputs
 (define print-result
   (lambda (res)
     (printf "Test ~A:~n  Expected Output   Student Output   Points"
@@ -171,9 +182,7 @@
                (printf "      ~A~n" (list-ref points i))
                )
       (printf "-------------------~n")
-      (printf "SUBTOTAL: ~A~n" (sumlist points))
-      
-      )
+      (printf "SUBTOTAL: ~A~n" (sumlist points)))
 
             (if (empty? (result-msg res))
                 ""
@@ -190,17 +199,10 @@
     (printf "ASMT-INFO: ~A, ~A, DATE: ~A ~n" (asmt-number my-asmt) (asmt-class my-asmt) (asmt-date my-asmt))
     (printf "-------------------")
     (let* ([listy (asmt-list-o-tests my-asmt)]
-           [length-listy (length listy)])
-      (dotimes (i length-listy)
-            (let* ([cur-test (list-ref listy i)]
-                   [point-subtotal 0])
-              ;; (print-result
-               (printf "~A" (first cur-test))
-              
-              )   
-          )
-      )
-    ))
+           [length-listy (length listy)]
+           [result-list (map run-test listy)])
+      (map print-result result-list)
+      )))
 
 ;; Main function that grades all the assignments
 ;; Searches through the current directory for all files of the
