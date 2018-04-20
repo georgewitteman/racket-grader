@@ -7,13 +7,12 @@
 ;; RESULTS-VEC: List, a list containing the results of applying students func to input-vec
 ;; SOLN-VEC: List, a list containing the results of applying soln func to input-vec
 ;; POINTS-VEC: List, containing either 0 or some other number
-;; MSG: string, message for any possible errors encountered
 (define-struct result (name-of-test
                        input-vec
                        results-vec
                        soln-vec
                        pts-vec
-                       msg))
+                       ))
 
 ;; STRUCT: TEST
 ;;------------
