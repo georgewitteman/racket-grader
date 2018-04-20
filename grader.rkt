@@ -1,4 +1,6 @@
 (load "asserts.rkt" )
+
+
 ;; STRUCT: RESULT
 ;; gives results of tests
 ;;--------------
@@ -118,7 +120,7 @@
 ;;; prints result for one test, over possibly multiple inputs
 (define print-result
   (lambda (res)
-    (printf "Test ~A:~n     Expected Output   Student Output   Points"
+    (printf "Test ~A:~n                        Expected Output   Student Output   Points"
             (result-name-of-test res))
     (let* ([len (length (result-input-vec res))]
            [inputs (result-input-vec res)]
@@ -126,10 +128,10 @@
            [soln (result-soln-vec res)]
            [points (result-pts-vec res)])
       (dotimes (i len)
-               (printf "~ninput(s): ~A" (list-ref inputs i))
-               (printf "      ~A" (list-ref results i))
+               (printf "~ninput(s): ~A" (first (list-ref inputs i)))
                (printf "      ~A" (list-ref soln i))
-               (printf "      ~A" (list-ref points i))
+               (printf "          ~A" (list-ref results i))
+               (printf "          ~A" (list-ref points i))
                )
       (printf "~n-------------------~n")
       (printf "SUBTOTAL: ~A~n" (sumlist points)))))
@@ -137,14 +139,15 @@
 
 
 
-(define asmt-1 (make-asmt "ASMT-1" "CMPU-101" "4/18/2018" '((2 3) (1 3) (2 3))))
+(define asmt-1 (make-asmt "ASMT-1" "CMPU-101" "4/18/2018" (list (make-test "TESTY" 2 (lambda (listy) (first listy)) '((()) ((1 2 3 4))) (lambda (listy) listy))
+                                                                (make-test "TEST 2" 4 * '((1 2) (1 2 3 4)) *))))
 
 ;;; Prints all results for a given student
 (define print-all-results
   (lambda (student-name my-asmt)
     (printf "~n-------------------~nSTUDENT: ~A~n" student-name)
     (printf "ASMT-INFO: ~A, ~A, DATE: ~A ~n" (asmt-number my-asmt) (asmt-class my-asmt) (asmt-date my-asmt))
-    (printf "-------------------")
+    (printf "-------------------~n")
     (let* ([listy (asmt-list-o-tests my-asmt)]
            [length-listy (length listy)]
            [result-list (map run-test listy)])
