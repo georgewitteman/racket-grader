@@ -148,17 +148,30 @@
           (lambda (exn)
             exn)
         (apply func inputs)))))
-=======
 ;; -------------------------------------------------------
->>>>>>> 83e231ec268c45912dfe8ead858e4ee79c6ca796
+(define replaceNth
+  (lambda (nth item list1)
+    (cond [(= nth 1) (cons item (cdr list1))] ;; If nth = 1 replace element at that location and add rest of list
+          [else (cons (car list1) (replaceNth (- nth 1) item (cdr list1)))]))) ;else decrement nth, and cons/ recursively call replaceNth on rest of list
+
+
 
 (define run-test
   (lambda (testy)
-    (let ([res (make-result (test-name-of-test testy)
+    (let* ([res (make-result (test-name-of-test testy)
                             (test-list-o-inputs testy)
                             (map (run-case (test-func-name testy)) (test-list-o-inputs testy))
                             (map (test-soln-function testy) (test-list-o-inputs testy))
-                            '())])
+                            (map (lambda () 0) (test-list-o-inputs testy)))]
+          [len (length (test-list-o-inputs testy))]
+          [stu-res (result-results-vec res)]
+          [soln-res (result-soln-vec res)]
+          [points-per (test-points-per-case testy)]
+          [res-pts (result-pts-vec res)])
+      (dotimes (i len)
+               (if (eq? (list-ref stu-res i) (list-ref soln-res i))
+                   (replaceNth (+ i 1) points-per res-pts)
+               ))
       
 
       
