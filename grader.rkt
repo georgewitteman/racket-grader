@@ -1,13 +1,30 @@
 ;; Struct for results of tests
 ;; NAME: Name of the test
 ;; MAX: Max points student could have received
-;; PTS: Points the student received
+;; PTS-VEC: Points the student received for each subquestion
 ;; MSG: An optional error message
-(define-struct result (question name max pts msg))
+(define-struct result (name-of-test
+                       func-name
+                       input-vec
+                       results-vec
+                       soln-vec
+                       pts-vec
+                       msg))
 
-(define-struct test (question name max func))
+(define-struct test (name-of-test
+                     points-per-case
+                     func-name
+                     list-o-inputs
+                     soln-function))
 
 (define-struct asmt (number class date list-o-tests))
+
+(define sumlist
+  (lambda (listy)
+    (if (null? listy)
+        0
+        (+ (first listy) (sumlist (rest listy))))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;-------------ASSERTS--------------;;
@@ -126,36 +143,49 @@
        empty))))
 
 
-
-
-;;(define print-result
-  ;;(lambda (res)
-    ;;(printf "~A: ~A (~A/~A)~A~n"
-     ;;       (result-question res)
-       ;;     (result-name res)
-         ;;   (result-pts res)
-           ;; (result-max res)
-           ;; (if (empty? (result-msg res))
-             ;;   ""
-              ;;  (string-append ": " (result-msg res))))))
-(define asmt-1 (make-asmt "ASMT-1" "CMPU-101" "4/18/2018" '(1 2 3 4)))
-
+;;; Print result for a series of tests for one question
 (define print-result
+  (lambda (res)
+    (printf "Test ~A:~n  Expected Output   Student Output   Points"
+            (result-name-of-test res))
+    (let* ([len (length (result-input-vec ))]
+           [inputs (result-input-vec res)]
+           [results (result-results-vec res)]
+           [soln (result-soln-vec res)]
+           [points (result-pts-vec res)])
+      (dotimes (i len)
+               (printf "input(s): ~A" (list-ref inputs i))
+               (printf "      ~A" (list-ref results i))
+               (printf "      ~A" (list-ref soln i))
+               (printf "      ~A~n" (list-ref points i))
+               )
+      (printf "-------------------~n")
+      (printf "SUBTOTAL: ~A~n" (sumlist points))
+      
+      )
+
+            (if (empty? (result-msg res))
+                ""
+              (string-append ": " (result-msg res)))))
+
+
+
+
+(define asmt-1 (make-asmt "ASMT-1" "CMPU-101" "4/18/2018" '((2 3) (1 3) (2 3))))
+
+(define print-all-results
   (lambda (student-name my-asmt)
     (printf "-------------------~nSTUDENT: ~A~n" student-name)
     (printf "ASMT-INFO: ~A, ~A, DATE: ~A ~n" (asmt-number my-asmt) (asmt-class my-asmt) (asmt-date my-asmt))
     (printf "-------------------")
     (let* ([listy (asmt-list-o-tests my-asmt)]
-           [length-listy (- (length listy) 1)])
+           [length-listy (length listy)])
       (dotimes (i length-listy)
             (let* ([cur-test (list-ref listy i)]
-                   [test-name (test-name cur-test)]
-                   [points-per-case (test-points-per-case cur-test)]
-                   [func-name (test-function-name cur-test)]
-                   [input-list (test-list-o-inputs cur-test)]
-                   [soln-func (test-soln-func cur-test)])
+                   [point-subtotal 0])
+              ;; (print-result
+               (printf "~A" (first cur-test))
               
-              (printf "hey")
               )   
           )
       )
