@@ -1,4 +1,4 @@
-
+(load "asserts.rkt" )
 ;; STRUCT: RESULT
 ;; gives results of tests
 ;;--------------
@@ -45,6 +45,7 @@
         (+ (first listy) (sumlist (rest listy))))))
 
 
+<<<<<<< HEAD
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;-------------ASSERTS--------------;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -140,10 +141,36 @@
 ;;-------------------------------;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+(define run-case
+  (lambda (func)
+    (lambda (inputs)
+      (with-exception-handler
+          (lambda (exn)
+            exn)
+        (apply func inputs)))))
+=======
+;; -------------------------------------------------------
+>>>>>>> 83e231ec268c45912dfe8ead858e4ee79c6ca796
 
 (define run-test
   (lambda (testy)
+    (let ([res (make-result (test-name-of-test testy)
+                            (test-list-o-inputs testy)
+                            (map (run-case (test-func-name testy)) (test-list-o-inputs testy))
+                            (map (test-soln-function testy) (test-list-o-inputs testy))
+                            '())])
+      
+
+      
+    (for-each
+     (lambda (inputs)
+       (let ([soln (apply soln-func input)])
+         (with-exception-handler
+             (lambda (exn)
+               
+       )
+     (test-list-o-inputs testy))
+      res)))
     (with-handlers
         ([exn:fail?
           (lambda (exn)
@@ -203,7 +230,7 @@
            [result-list (map run-test listy)])
       (map print-result result-list)
       (printf "TOTAL SCORE: "
-      )))
+      ))))
 
 ;; Main function that grades all the assignments
 ;; Searches through the current directory for all files of the
