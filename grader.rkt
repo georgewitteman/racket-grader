@@ -1,4 +1,5 @@
-(load "asserts.rkt" )
+(load "asserts.rkt")
+(require scheme/pretty)
 
 
 ;; STRUCT: RESULT
