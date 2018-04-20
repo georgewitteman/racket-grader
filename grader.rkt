@@ -1,16 +1,27 @@
-;; Struct for results of tests
-;; NAME: Name of the test
-;; MAX: Max points student could have received
-;; PTS-VEC: Points the student received for each subquestion
-;; MSG: An optional error message
+
+;; STRUCT: RESULT
+;; gives results of tests
+;;--------------
+;; NAME-OF-TEST: String, name of the test for which we have results
+;; INPUT-VEC: List, a list of lists containing the inputs for each trial
+;; RESULTS-VEC: List, a list containing the results of applying students func to input-vec
+;; SOLN-VEC: List, a list containing the results of applying soln func to input-vec
+;; POINTS-VEC: List, containing either 0 or some other number
+;; MSG: string, message for any possible errors encountered
 (define-struct result (name-of-test
-                       func-name
                        input-vec
                        results-vec
                        soln-vec
                        pts-vec
                        msg))
 
+;; STRUCT: TEST
+;;------------
+;; NAME-OF-TEST: String, name of the test
+;; POINTS-PER-CASE: Number, points received per correct result
+;; FUNC-NAME: Symbol, name of test as it will be in students files
+;; LIST-O-INPUTS: List, a list of lists containing the inputs for each trial
+;; SOLN-FUNC: Symbol, func defined to give correct solns
 (define-struct test (name-of-test
                      points-per-case
                      func-name
