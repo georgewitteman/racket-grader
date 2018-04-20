@@ -45,97 +45,6 @@
         (+ (first listy) (sumlist (rest listy))))))
 
 
-<<<<<<< HEAD
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;-------------ASSERTS--------------;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-(define assert-eq?
-  (lambda (v1 v2)
-    (if (eq? v1 v2)
-        #t
-        (error "assert-eq? fail"))))
-
-;; 
-;; Inputs: X, the user input
-;;         l, the lower bound of the range
-;;         u, the upper bound of the range
-;;  Note that the interval is inclusive
-(define assert-in-range?
-  (lambda (x l u)
-    (if (<= l x u)
-        #t
-        (error "assert-in-range? fail"))))
-
-(define assert-within-delta?
-  (lambda (x delta)
-    (if (<= (- x delta) x (+ x delta))
-        #t
-        (error "assert-within-delta? fail"))))
-
-;; Inputs: X, the user input
-;;         K, the value X must be less than
-(define assert-less-than?
-  (lambda (x k)
-    (if (< x k)
-        #t
-        (error "assert-less-than? fail"))))
-
-;; Less-than-or-eq
-;; Inputs: X, the user input
-;;         K, the value X must be less than
-(define assert-leq-than?
-  (lambda (x k)
-    (if (<= x k)
-        #t
-        (error "assert-leq-than? fail"))))
-
-;; Inputs: X, the user input
-;;         K, the value X must be less than
-(define assert-greater-than?
-  (lambda (x k)
-    (if (> x k)
-        #t
-        (error "assert-greater-than? fail"))))
-
-;; Greater-than-or-eq
-;; Inputs: X, a number, the user input
-;;         K, a number, the value X must be less than
-(define assert-geq-than?
-  (lambda (x k)
-    (if (>= x k)
-        #t
-        (error "assert-geq-than? fail"))))
-
-;; Inputs:  listy, the user's input list
-;;          listz, another specified list
-;; Returns #t if listy  is the same as listz
-;; as judged by equal? 
-(define assert-same-list?
-  (lambda (listy listz)
-    (if (equal? listy listz)
-        #t
-        (error "assert-same-list? fail"))))
-
-;; Inputs:  listy, the user's input list
-;;          listz, another specified list
-;; Returns #t if listy  is the same as listz
-;; as judged by equal? or if (reverse listy) is the same as
-;; listz as judged by equal?
-(define assert-same-list-rev?
-  (lambda (listy listz)
-    (if (or (equal? listy listz)
-            (equal? (reverse listy) listz))
-        #t
-        (error "assert-same-list-rev? fail"))))
-
-(define assert-string?
-  (lambda (x)
-    (if (string? x)
-        #t
-        (error "assert-string? fail"))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;-------------------------------;;
@@ -144,10 +53,12 @@
 (define run-case
   (lambda (func)
     (lambda (inputs)
-      (with-exception-handler
-          (lambda (exn)
-            exn)
+      (with-handlers
+          ([exn:fail?
+            (lambda (exn)
+            exn)])
         (apply func inputs)))))
+
 ;; -------------------------------------------------------
 (define replaceNth
   (lambda (nth item list1)
@@ -161,45 +72,45 @@
     (let* ([res (make-result (test-name-of-test testy)
                             (test-list-o-inputs testy)
                             (map (run-case (test-func-name testy)) (test-list-o-inputs testy))
-                            (map (test-soln-function testy) (test-list-o-inputs testy))
-                            (map (lambda () 0) (test-list-o-inputs testy)))]
+                            (map (lambda (inputs) (apply (test-soln-function testy) inputs)) (test-list-o-inputs testy))
+                            (map (lambda (x) 0) (test-list-o-inputs testy)))]
           [len (length (test-list-o-inputs testy))]
           [stu-res (result-results-vec res)]
           [soln-res (result-soln-vec res)]
           [points-per (test-points-per-case testy)]
           [res-pts (result-pts-vec res)])
       (dotimes (i len)
-               (if (eq? (list-ref stu-res i) (list-ref soln-res i))
-                   (replaceNth (+ i 1) points-per res-pts)
-               ))
+               (if (equal? (list-ref stu-res i) (list-ref soln-res i))
+                   (set-result-pts-vec! res (replaceNth (+ i 1) points-per (result-pts-vec res)))))
+      res)))
       
 
       
-    (for-each
-     (lambda (inputs)
-       (let ([soln (apply soln-func input)])
-         (with-exception-handler
-             (lambda (exn)
-               
-       )
-     (test-list-o-inputs testy))
-      res)))
-    (with-handlers
-        ([exn:fail?
-          (lambda (exn)
-            (make-result
-             (test-question testy)
-             (test-name testy)
-             (test-max testy)
-             0
-             (exn-message exn)))])
-      ((test-func testy))
-      (make-result
-       (test-question testy)
-       (test-name testy)
-       (test-max testy)
-       (test-max testy)
-       empty))))
+;    (for-each
+;     (lambda (inputs)
+;       (let ([soln (apply soln-func input)])
+;         (with-exception-handler
+;             (lambda (exn)
+;               
+;       )
+;     (test-list-o-inputs testy))
+;      res)))
+;    (with-handlers
+;        ([exn:fail?
+;          (lambda (exn)
+;            (make-result
+;             (test-question testy)
+;             (test-name testy)
+;             (test-max testy)
+;             0
+;             (exn-message exn)))])
+;      ((test-func testy))
+;      (make-result
+;       (test-question testy)
+;       (test-name testy)
+;       (test-max testy)
+;       (test-max testy)
+;       empty))))
 
 
 ;;; PRINT-RESULT
@@ -207,25 +118,21 @@
 ;;; prints result for one test, over possibly multiple inputs
 (define print-result
   (lambda (res)
-    (printf "Test ~A:~n  Expected Output   Student Output   Points"
+    (printf "Test ~A:~n     Expected Output   Student Output   Points"
             (result-name-of-test res))
-    (let* ([len (length (result-input-vec ))]
+    (let* ([len (length (result-input-vec res))]
            [inputs (result-input-vec res)]
            [results (result-results-vec res)]
            [soln (result-soln-vec res)]
            [points (result-pts-vec res)])
       (dotimes (i len)
-               (printf "input(s): ~A" (list-ref inputs i))
+               (printf "~ninput(s): ~A" (list-ref inputs i))
                (printf "      ~A" (list-ref results i))
                (printf "      ~A" (list-ref soln i))
-               (printf "      ~A~n" (list-ref points i))
+               (printf "      ~A" (list-ref points i))
                )
-      (printf "-------------------~n")
-      (printf "SUBTOTAL: ~A~n" (sumlist points)))
-
-            (if (empty? (result-msg res))
-                ""
-              (string-append ": " (result-msg res)))))
+      (printf "~n-------------------~n")
+      (printf "SUBTOTAL: ~A~n" (sumlist points)))))
 
 
 
