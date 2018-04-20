@@ -1,4 +1,4 @@
-
+(load "asserts.rkt" )
 ;; STRUCT: RESULT
 ;; gives results of tests
 ;;--------------
@@ -46,6 +46,7 @@
         (+ (first listy) (sumlist (rest listy))))))
 
 
+<<<<<<< HEAD
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;-------------ASSERTS--------------;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -148,6 +149,9 @@
           (lambda (exn)
             exn)
         (apply func inputs)))))
+=======
+;; -------------------------------------------------------
+>>>>>>> 83e231ec268c45912dfe8ead858e4ee79c6ca796
 
 (define run-test
   (lambda (testy)
