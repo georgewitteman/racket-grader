@@ -193,15 +193,17 @@
 
 (define asmt-1 (make-asmt "ASMT-1" "CMPU-101" "4/18/2018" '((2 3) (1 3) (2 3))))
 
+;;; Prints all results for a given student
 (define print-all-results
   (lambda (student-name my-asmt)
-    (printf "-------------------~nSTUDENT: ~A~n" student-name)
+    (printf "~n-------------------~nSTUDENT: ~A~n" student-name)
     (printf "ASMT-INFO: ~A, ~A, DATE: ~A ~n" (asmt-number my-asmt) (asmt-class my-asmt) (asmt-date my-asmt))
     (printf "-------------------")
     (let* ([listy (asmt-list-o-tests my-asmt)]
            [length-listy (length listy)]
            [result-list (map run-test listy)])
       (map print-result result-list)
+      (printf "TOTAL SCORE: "
       )))
 
 ;; Main function that grades all the assignments
