@@ -1,58 +1,12 @@
 (load "asserts.rkt")
+(load "structs-and-helper-funcs.rkt")
 (require scheme/pretty)
-
-
-;; STRUCT: RESULT
-;; gives results of tests
-;;--------------
-;; NAME-OF-TEST: String, name of the test for which we have results
-;; INPUT-VEC: List, a list of lists containing the inputs for each trial
-;; RESULTS-VEC: List, a list containing the results of applying students func to input-vec
-;; SOLN-VEC: List, a list containing the results of applying soln func to input-vec
-;; POINTS-VEC: List, containing either 0 or some other number
-(define-struct result (name-of-test
-                       input-vec
-                       results-vec
-                       soln-vec
-                       pts-vec
-                       ))
-
-;; STRUCT: TEST
-;;------------
-;; NAME-OF-TEST: String, name of the test
-;; POINTS-PER-CASE: Number, points received per correct result
-;; FUNC-NAME: Symbol, name of test as it will be in students files
-;; LIST-O-INPUTS: List, a list of lists containing the inputs for each trial
-;; SOLN-FUNCTION: Symbol, func defined to give correct solns
-(define-struct test (name-of-test
-                     points-per-case
-                     func-name
-                     list-o-inputs
-                     soln-function))
-
-;; STRUCT: ASMT
-;;------------
-;; NUMBER: A string, the asmt number, such as "ASMT 1"
-;; CLASS: A string, the class the asmt if for, such as "CMPU 101"
-;; DATE: A string, the current date
-;; LIST-O-TESTS: A list, list of tests for the asmt
-(define-struct asmt (number class date list-o-tests))
-
-;;; SUMLIST
-;;;--------
-;;; function that returns the sum of elements in a list
-(define sumlist
-  (lambda (listy)
-    (if (null? listy)
-        0
-        (+ (first listy) (sumlist (rest listy))))))
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;-------------------------------;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; Run individual case
 (define run-case
   (lambda (func)
     (lambda (inputs)
@@ -60,15 +14,10 @@
           ([exn:fail?
             (lambda (exn)
             exn)])
-        (apply func inputs)))))
+        (apply (eval func) inputs)))))
+
 
 ;; -------------------------------------------------------
-(define replaceNth
-  (lambda (nth item list1)
-    (cond [(= nth 1) (cons item (cdr list1))] ;; If nth = 1 replace element at that location and add rest of list
-          [else (cons (car list1) (replaceNth (- nth 1) item (cdr list1)))]))) ;else decrement nth, and cons/ recursively call replaceNth on rest of list
-
-
 
 (define run-test
   (lambda (testy)
@@ -80,40 +29,12 @@
           [len (length (test-list-o-inputs testy))]
           [stu-res (result-results-vec res)]
           [soln-res (result-soln-vec res)]
-          [points-per (test-points-per-case testy)]
+          [points-per (test-points-for-case testy)]
           [res-pts (result-pts-vec res)])
       (dotimes (i len)
                (if (equal? (list-ref stu-res i) (list-ref soln-res i))
-                   (set-result-pts-vec! res (replaceNth (+ i 1) points-per (result-pts-vec res)))))
+                   (set-result-pts-vec! res (replaceNth (+ i 1) (list-ref points-per i) (result-pts-vec res)))))
       res)))
-      
-
-      
-;    (for-each
-;     (lambda (inputs)
-;       (let ([soln (apply soln-func input)])
-;         (with-exception-handler
-;             (lambda (exn)
-;               
-;       )
-;     (test-list-o-inputs testy))
-;      res)))
-;    (with-handlers
-;        ([exn:fail?
-;          (lambda (exn)
-;            (make-result
-;             (test-question testy)
-;             (test-name testy)
-;             (test-max testy)
-;             0
-;             (exn-message exn)))])
-;      ((test-func testy))
-;      (make-result
-;       (test-question testy)
-;       (test-name testy)
-;       (test-max testy)
-;       (test-max testy)
-;       empty))))
 
 
 ;;; PRINT-RESULT
@@ -135,17 +56,13 @@
                (printf "          ~A" (list-ref points i))
                )
       (printf "~n-------------------~n")
-      (printf "SUBTOTAL: ~A~n" (sumlist points)))))
+      (printf "SUBTOTAL: ~A~n" (sumlist points))
+      (printf "-------------------~n"))))
 
-
-
-
-(define asmt-1 (make-asmt "ASMT-1" "CMPU-101" "4/18/2018" (list (make-test "TESTY" 2 (lambda (listy) (first listy)) '((()) ((1 2 3 4))) (lambda (listy) listy))
-                                                                (make-test "TEST 2" 4 * '((1 2) (1 2 3 4)) *))))
 
 ;;; Prints all results for a given student
 (define print-all-results
-  (lambda (student-name my-asmt)
+  (lambda (my-asmt)
     (printf "~n-------------------~nSTUDENT: ~A~n" student-name)
     (printf "ASMT-INFO: ~A, ~A, DATE: ~A ~n" (asmt-number my-asmt) (asmt-class my-asmt) (asmt-date my-asmt))
     (printf "-------------------~n")
@@ -168,8 +85,11 @@
        (load test-file)
        (load filename)
        (printf "~a:~n-----------------------------------~n" filename)
-       (map print-result (map run-test tests)) ;; Returns list of result structs ;;;
-       (printf "~n"))
+       (print-all-results student-name cur-asmt) ;; Returns list of result structs ;;;
+       (printf "~n")
+       ;;CODE HERE ---to set functions to null)
+       )
+     
      ;; Get a list of all the assignment files in
      ;; the current directory
      (filter
@@ -180,3 +100,6 @@
       (directory-list ".")))))
 
 ;;-----------------------------------------------------;;
+
+(define asmt-1 (make-asmt "ASMT-1" "CMPU-101" "4/18/2018" (list (make-test "TESTY" '(1 2) (lambda (listy) (first listy)) '((()) ((1 2 3 4))) (lambda (listy) listy))
+                                                                (make-test "TEST 2" '(3 4) * '((1 2) (1 2 3 4)) *))))
