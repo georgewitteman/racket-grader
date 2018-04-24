@@ -90,35 +90,20 @@
       (dolist (filename list-o-files)
               (load test-file)
               (load filename)
-              (printf "~a:~n-------~n" filename)
+              (printf "~nFilename: ~a" filename)
               (print-all-results my-asmt student-name)
               (printf "~n")
+              (reset-global)
               ))))
 
     ;;-----------------------------------------------------;;
 
-;    (for-each
-;     ;; Load and run tests on each assignment file
-;     (lambda (filename)
-;       (load test-file)
-;       (load filename)
-;       (printf "~a:~n-----------------------------------~n" filename)
-;       (print-all-results student-name asmt) ;; Returns list of result structs ;;;
-;       (printf "~n")
-;       ;;CODE HERE ---to set functions to null)
-;       )
-;     
-;     ;; Get a list of all the assignment files in
-;     ;; the current directory
-;     (filter
-;      (lambda (file)
-;        (regexp-match?
-;         (regexp (string-append "-" asmt-name ".rkt"))
-;         file))
-;      (directory-list ".")))))
-
-
-;;-----------------------------------------------------;;
-
-(define asmt-1 (make-asmt "ASMT-1" "CMPU-101" "4/18/2018" (list (make-test "TESTY" '(1 2) (lambda (listy) (first listy)) '((()) ((1 2 3 4))) (lambda (listy) listy))
-                                                                (make-test "TEST 2" '(3 4) * '((1 2) (1 2 3 4)) *))))
+(define reset-global
+  (lambda ()
+    (let ([list-o-tests (asmt-list-o-tests my-asmt)])
+      (dolist (testy list-o-tests)
+              (let ([my-Test (eval(test-func-name testy))])
+                (printf "~A" my-Test)
+                (define m
+                (printf "~A" (eval (test-func-name testy)))
+                (printf ""))))))
