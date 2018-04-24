@@ -14,7 +14,7 @@
       (with-handlers
           ([exn:fail?
             (lambda (exn)
-              exn)])
+            exn)])
         (apply (eval func) inputs)))))
 
 
@@ -116,3 +116,9 @@
 ;         (regexp (string-append "-" asmt-name ".rkt"))
 ;         file))
 ;      (directory-list ".")))))
+
+
+;;-----------------------------------------------------;;
+
+(define asmt-1 (make-asmt "ASMT-1" "CMPU-101" "4/18/2018" (list (make-test "TESTY" '(1 2) (lambda (listy) (first listy)) '((()) ((1 2 3 4))) (lambda (listy) listy))
+                                                                (make-test "TEST 2" '(3 4) * '((1 2) (1 2 3 4)) *))))

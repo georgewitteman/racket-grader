@@ -10,11 +10,12 @@
 
 (define student-name "Travers")
 
-;(define facty
-;  (lambda (x)
-;    (if (<= x 1)
-;        1
-;        (* 2 (facty (- x 1))))))
+
+(define facty
+  (lambda (x)
+    (if (<= x 1)
+        1
+        (* x (facty (- x 1))))))
 
 (define rev-listy
   (lambda (listy)
