@@ -41,8 +41,8 @@
            [soln-res (result-soln-vec res)]
            [points-per (test-points-for-case testy)]
            [res-pts (result-pts-vec res)])
-      ;; Check to see if the student received the correct answer and if they did give them the
-      ;; points for the question
+      ;; Check to see if the student received the correct answer and if they did
+      ;; give them the points for the question
       (dotimes (i len)
                (if (equal? (list-ref stu-res i) (list-ref soln-res i))
                    (set-result-pts-vec! res (replaceNth (+ i 1)
@@ -105,3 +105,6 @@
               (printf "~nFilename: ~a" filename)
               (print-all-results my-asmt student-name)
               (printf "~n")))))
+
+; (define funcs '(facty abs list-to-veck))
+; (eval (list 'define (first funcs) #f))
