@@ -28,12 +28,12 @@
                              ;; Student Results
                              (map (run-case (test-func-name testy))
                                   (test-list-o-inputs testy))
-                             
+
                              ;; Soln Results
                              (map (lambda (inputs)
                                     (apply (test-soln-function testy) inputs))
                                   (test-list-o-inputs testy))
-                             
+
                              ;; Points vector
                              (map (lambda (x) 0) (test-list-o-inputs testy)))]
            [len (length (test-list-o-inputs testy))]
@@ -91,7 +91,7 @@
 ;; Main function that grades all the assignments
 ;; Searches through the current directory for all files of the
 ;; form <username>-ASMT-NAME.rkt, loads them, runs the tests,
-;; and 
+;; and
 (define grade-asmt
   (lambda (asmt-name test-file)
     (let ((list-o-files (filter (lambda (file)
@@ -108,3 +108,14 @@
 
 ; (define funcs '(facty abs list-to-veck))
 ; (eval (list 'define (first funcs) #f))
+    ;;-----------------------------------------------------;;
+
+(define reset-global
+  (lambda ()
+    (let ([list-o-tests (asmt-list-o-tests my-asmt)])
+      (dolist (testy list-o-tests)
+              (let ([my-func (eval(test-func-name testy))])
+                (printf "~A" my-func)
+                (define (eval my-func) #f)
+                (printf "~A" (eval (test-func-name testy)))
+                (printf ""))))))
