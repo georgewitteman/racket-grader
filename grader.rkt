@@ -14,7 +14,7 @@
       (with-handlers
           ([exn:fail?
             (lambda (exn)
-            exn)])
+              exn)])
         (apply (eval func) inputs)))))
 
 
@@ -25,9 +25,17 @@
   (lambda (testy)
     (let* ([res (make-result (test-name-of-test testy) ;; Name of test
                              (test-list-o-inputs testy) ;; Inputs to test
-                             (map (run-case (test-func-name testy)) (test-list-o-inputs testy)) ;; Student Results 
-                             (map (lambda (inputs) (apply (test-soln-function testy) inputs)) (test-list-o-inputs testy)) ;; Soln Results
-                             (map (lambda (x) 0) (test-list-o-inputs testy)))] ;; Points vector
+                             ;; Student Results
+                             (map (run-case (test-func-name testy))
+                                  (test-list-o-inputs testy))
+                             
+                             ;; Soln Results
+                             (map (lambda (inputs)
+                                    (apply (test-soln-function testy) inputs))
+                                  (test-list-o-inputs testy))
+                             
+                             ;; Points vector
+                             (map (lambda (x) 0) (test-list-o-inputs testy)))]
            [len (length (test-list-o-inputs testy))]
            [stu-res (result-results-vec res)]
            [soln-res (result-soln-vec res)]
@@ -37,7 +45,9 @@
       ;; points for the question
       (dotimes (i len)
                (if (equal? (list-ref stu-res i) (list-ref soln-res i))
-                   (set-result-pts-vec! res (replaceNth (+ i 1) (list-ref points-per i) (result-pts-vec res)))))
+                   (set-result-pts-vec! res (replaceNth (+ i 1)
+                                                        (list-ref points-per i)
+                                                        (result-pts-vec res)))))
       res)))
 
 
@@ -46,7 +56,7 @@
 ;;; prints result for one test, over possibly multiple inputs
 (define print-result
   (lambda (res)
-    (printf "Test ~A:~n                        Expected Output   Student Output   Points"
+    (printf "Test ~A:~n\t\t\tExpected Output\tStudent Output\tPoints"
             (result-name-of-test res))
     (let* ([len (length (result-input-vec res))]
            [inputs (result-input-vec res)]
@@ -55,9 +65,9 @@
            [points (result-pts-vec res)])
       (dotimes (i len)
                (printf "~ninput(s): ~A" (first (list-ref inputs i)))
-               (printf "            ~A" (list-ref soln i))
-               (printf "            ~A" (list-ref results i))
-               (printf "            ~A" (list-ref points i))
+               (printf "\t\t~A" (list-ref soln i))
+               (printf "\t\t~A" (list-ref results i))
+               (printf "\t\t~A" (list-ref points i))
                )
       (printf "~n-------------------~n")
       (printf "SUBTOTAL: ~A~n" (sumlist points))
@@ -67,14 +77,16 @@
 (define print-all-results
   (lambda (my-asmt student-name)
     (printf "~n-------------------~nSTUDENT: ~A~n" student-name)
-    (printf "ASMT-INFO: ~A, ~A, DATE: ~A ~n" (asmt-number my-asmt) (asmt-class my-asmt) (asmt-date my-asmt))
+    (printf "ASMT-INFO: ~A, ~A, DATE: ~A ~n"
+            (asmt-number my-asmt)
+            (asmt-class my-asmt)
+            (asmt-date my-asmt))
     (printf "-------------------~n")
     (let* ([listy (asmt-list-o-tests my-asmt)]
            [length-listy (length listy)]
            [result-list (map run-test listy)])
       (map print-result result-list)
-      (printf "TOTAL SCORE: "
-              ))))
+      (printf "TOTAL SCORE: "))))
 
 ;; Main function that grades all the assignments
 ;; Searches through the current directory for all files of the
@@ -92,18 +104,4 @@
               (load filename)
               (printf "~nFilename: ~a" filename)
               (print-all-results my-asmt student-name)
-              (printf "~n")
-              (reset-global)
-              ))))
-
-    ;;-----------------------------------------------------;;
-
-(define reset-global
-  (lambda ()
-    (let ([list-o-tests (asmt-list-o-tests my-asmt)])
-      (dolist (testy list-o-tests)
-              (let ([my-Test (eval(test-func-name testy))])
-                (printf "~A" my-Test)
-                (define m
-                (printf "~A" (eval (test-func-name testy)))
-                (printf ""))))))
+              (printf "~n")))))

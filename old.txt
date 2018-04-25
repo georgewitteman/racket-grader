@@ -1,0 +1,14 @@
+;(reset-global)
+              
+
+;;-----------------------------------------------------;;
+
+;(define reset-global
+;  (lambda ()
+;    (let ([list-o-tests (asmt-list-o-tests my-asmt)])
+;      (dolist (testy list-o-tests)
+;              (let ([my-Test (eval(test-func-name testy))])
+;                (printf "~A" my-Test)
+;                ;(define )
+;                (printf "~A" (eval (test-func-name testy)))
+;                (printf ""))))))
