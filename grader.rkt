@@ -6,6 +6,8 @@
 ;;-------------------------------;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define *TOTAL* 0)
+
 ;;; Run individual case
 (define run-case
   (lambda (func)
@@ -48,6 +50,7 @@
                    (set-result-pts-vec! res (replaceNth (+ i 1)
                                                         (list-ref points-per i)
                                                         (result-pts-vec res)))))
+      (set! *TOTAL* (+ (sumlist (result-pts-vec res)) *TOTAL*))
       res)))
 
 
@@ -86,7 +89,7 @@
            [length-listy (length listy)]
            [result-list (map run-test listy)])
       (map print-result result-list)
-      (printf "TOTAL SCORE: "))))
+      (printf "TOTAL SCORE: ~A" *TOTAL*))))
 
 ;; Main function that grades all the assignments
 ;; Searches through the current directory for all files of the
@@ -104,7 +107,8 @@
               (load filename)
               (printf "~nFilename: ~a" filename)
               (print-all-results my-asmt student-name)
-              (printf "~n")))))
+              (printf "~n")
+              (set! *TOTAL* 0)))))
 
 ; (define funcs '(facty abs list-to-veck))
 ; (eval (list 'define (first funcs) #f))
