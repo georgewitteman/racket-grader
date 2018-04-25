@@ -102,8 +102,8 @@
   (lambda ()
     (let ([list-o-tests (asmt-list-o-tests my-asmt)])
       (dolist (testy list-o-tests)
-              (let ([my-Test (eval(test-func-name testy))])
-                (printf "~A" my-Test)
-                (define m
+              (let ([my-func (eval(test-func-name testy))])
+                (printf "~A" my-func)
+                (define (eval my-func) #f)
                 (printf "~A" (eval (test-func-name testy)))
                 (printf ""))))))
