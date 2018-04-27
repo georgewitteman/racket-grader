@@ -89,7 +89,7 @@
            [length-listy (length listy)]
            [result-list (map run-test listy)])
       (map print-result result-list)
-      (printf "TOTAL SCORE: ~A" *TOTAL*))))
+      (printf "TOTAL SCORE: ~A/~A" *TOTAL* (find-total-poss-points)))))
 
 ;; Main function that grades all the assignments
 ;; Searches through the current directory for all files of the
@@ -120,3 +120,12 @@
     (let ([list-o-tests (asmt-list-o-tests my-asmt)])
       (dolist (testy list-o-tests)
               (eval (list 'define (test-func-name testy) #f))))))
+
+(define find-total-poss-points
+  (lambda ()
+    (let ([list-o-tests (asmt-list-o-tests my-asmt)]
+          [points 0])
+      (dolist (testy list-o-tests)
+              (set! points (+ points (test-max-pts testy))))
+      points)))
+              
