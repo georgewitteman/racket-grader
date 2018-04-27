@@ -24,14 +24,18 @@
 ;;------------
 ;; NAME-OF-TEST: String, name of the test
 ;; POINTS-PER-CASE: LIST, containing the corresponding points each case is worth
+;; MAX-PTS: Number, max points received for a question
 ;; FUNC-NAME: Symbol, name of test as it will be in students files
 ;; LIST-O-INPUTS: List, a list of lists containing the inputs for each trial
 ;; SOLN-FUNCTION: Symbol, func defined to give correct solns
+
 (define-struct test (name-of-test
                      points-for-case
+                     max-pts
                      func-name
                      list-o-inputs
-                     soln-function))
+                     soln-function
+                     ))
 
 ;; STRUCT: ASMT
 ;;------------

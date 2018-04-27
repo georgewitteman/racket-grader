@@ -10,6 +10,7 @@
 (define test-1
   (make-test "FACTY"
              '(2 2 2 2 2)
+             10
              'facty 
              '((1) (2) (5) (6) (0))
              (letrec ((facty-soln (lambda (n)
@@ -21,6 +22,7 @@
 (define test-2
   (make-test "REV_LISTY"
              '(2 2 2 2)
+             8
              'rev-listy
              '(((1 2 3 4 6 7 8 9 10 11 12)) (()) ((5 4 3)) ((6)))
              (letrec ((rev-listy-soln (lambda (listy)
