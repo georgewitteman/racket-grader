@@ -17,8 +17,7 @@
                        input-vec
                        results-vec
                        soln-vec
-                       pts-vec
-                       ))
+                       pts-vec))
 
 ;; STRUCT: TEST
 ;;------------
@@ -34,8 +33,7 @@
                      max-pts
                      func-name
                      list-o-inputs
-                     soln-function
-                     ))
+                     soln-function))
 
 ;; STRUCT: ASMT
 ;;------------
@@ -50,16 +48,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;
 
 
-;;; 
-(define replaceNth
+;; REPLACE-NTH
+;; -----------------
+;; Returns a list with the NTH element in LIST1 replaced with ITEM
+(define replace-nth
   (lambda (nth item list1)
-    (cond [(= nth 1) (cons item (cdr list1))] ;; If nth = 1 replace element at that location and add rest of list
-          [else (cons (car list1) (replaceNth (- nth 1) item (cdr list1)))]))) ;else decrement nth, and cons/ recursively call replaceNth on rest of list
+    (cond
+      ;; If nth = 1 replace element at that location and add rest of list
+      [(= nth 1) (cons item (cdr list1))]
+      ;else decrement nth, and cons/ recursively call replace-nth on rest of list
+      [else (cons (car list1) (replace-nth (- nth 1) item (cdr list1)))]))) 
 
 
-;;; SUMLIST
-;;;--------
-;;; function that returns the sum of elements in a list
+;; SUMLIST
+;; --------
+;; Return the sum of the elements in LISTY
 (define sumlist
   (lambda (listy)
     (if (null? listy)
@@ -69,10 +72,12 @@
 
 ;; SUBSTRINGY
 ;; --------------------
+;; Make a string of LENN from IN-STR
 (define substringy
-  (lambda (instr maxlen)
-    (let ((str (format "~A" instr)))
-      (format (string-append "~" (number->string maxlen) "F")
-              (substring str
-                         0
-                         (min (string-length str) maxlen))))))
+  (lambda (in-str lenn)
+    (let ((str (format "~A" in-str))) ;; Convert IN-STR to string
+      (format
+       ;; Build the format string (e.g. "~10F") to enforce minimum length
+       (string-append "~" (number->string lenn) "F")
+       ;; Get substring to enforce maximum length
+       (substring str 0 (min (string-length str) lenn))))))

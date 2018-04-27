@@ -11,7 +11,7 @@
   (make-test "FACTY"
              '(2 2 2 2 2)
              10
-             'facty 
+             'facty
              '((1) (2) (5) (6) (0))
              (letrec ((facty-soln (lambda (n)
                                     (if (<= n 1)
