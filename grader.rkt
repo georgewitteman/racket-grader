@@ -104,6 +104,7 @@
               (load filename)
               (printf "~nFilename: ~a" filename)
               (print-all-results my-asmt student-name)
+              (reset-global)
               (printf "~n")))))
 
 ; (define funcs '(facty abs list-to-veck))
@@ -114,8 +115,4 @@
   (lambda ()
     (let ([list-o-tests (asmt-list-o-tests my-asmt)])
       (dolist (testy list-o-tests)
-              (let ([my-func (eval(test-func-name testy))])
-                (printf "~A" my-func)
-                (define (eval my-func) #f)
-                (printf "~A" (eval (test-func-name testy)))
-                (printf ""))))))
+              (eval (list 'define (test-func-name testy) #f))))))
