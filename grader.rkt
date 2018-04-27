@@ -50,7 +50,9 @@
       ;; Check to see if the student received the correct answer and if they did
       ;; give them the points for the question
       (dotimes (i len)
-               (if (equal? (list-ref stu-res i) (list-ref soln-res i))
+               (if ((test-pred testy)
+                    (list-ref stu-res i)
+                    (list-ref soln-res i))
                    (set-result-pts-vec! res (replace-nth (+ i 1)
                                                         (list-ref points-per i)
                                                         (result-pts-vec res)))))

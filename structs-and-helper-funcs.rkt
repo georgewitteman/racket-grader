@@ -26,6 +26,7 @@
 ;; MAX-PTS: Number, max points received for a question
 ;; FUNC-NAME: Symbol, name of test as it will be in students files
 ;; LIST-O-INPUTS: List, a list of lists containing the inputs for each trial
+;; PRED: Predicate function to check equality of solution and student output
 ;; SOLN-FUNCTION: Symbol, func defined to give correct solns
 
 (define-struct test (name-of-test
@@ -33,6 +34,7 @@
                      max-pts
                      func-name
                      list-o-inputs
+                     pred
                      soln-function))
 
 ;; STRUCT: ASMT

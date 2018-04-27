@@ -13,6 +13,7 @@
              10
              'facty
              '((1) (2) (5) (6) (0))
+             equal?
              (letrec ((facty-soln (lambda (n)
                                     (if (<= n 1)
                                         1
@@ -25,6 +26,7 @@
              8
              'rev-listy
              '(((1 2 3 4 6 7 8 9 10 11 12)) (()) ((5 4 3)) ((6)))
+             equal?
              (letrec ((rev-listy-soln (lambda (listy)
                                         (if (null? listy)
                                             '()
