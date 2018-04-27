@@ -22,7 +22,7 @@
   (make-test "REV_LISTY"
              '(2 2 2 2)
              'rev-listy
-             '(((1 2 3 4)) (()) ((5 4 3)) ((6)))
+             '(((1 2 3 4 6 7 8 9 10 11 12)) (()) ((5 4 3)) ((6)))
              (letrec ((rev-listy-soln (lambda (listy)
                                         (if (null? listy)
                                             '()

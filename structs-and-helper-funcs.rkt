@@ -1,4 +1,4 @@
-
+(load "format.rkt")
 ;;;;;;;;;;;;;;;;;;;;;
 ;;;----STRUCTS----;;;
 ;;;;;;;;;;;;;;;;;;;;;
@@ -61,3 +61,14 @@
     (if (null? listy)
         0
         (+ (first listy) (sumlist (rest listy))))))
+
+
+;; SUBSTRINGY
+;; --------------------
+(define substringy
+  (lambda (instr maxlen)
+    (let ((str (format "~A" instr)))
+      (format (string-append "~" (number->string maxlen) "F")
+              (substring str
+                         0
+                         (min (string-length str) maxlen))))))

@@ -1,3 +1,4 @@
+(load "format.rkt")
 (load "asserts.rkt")
 (load "structs-and-helper-funcs.rkt")
 (require scheme/pretty)
@@ -53,25 +54,24 @@
       (set! *TOTAL* (+ (sumlist (result-pts-vec res)) *TOTAL*))
       res)))
 
-
 ;;; PRINT-RESULT
 ;;;-------------
 ;;; prints result for one test, over possibly multiple inputs
 (define print-result
   (lambda (res)
-    (printf "Test ~A:~n\t\t\tExpected Output\tStudent Output\tPoints"
-            (result-name-of-test res))
+    (printf "Test ~A~n" (result-name-of-test res))
+    (printf "\t\t      Expected Output   Student Output           Points")
     (let* ([len (length (result-input-vec res))]
            [inputs (result-input-vec res)]
            [results (result-results-vec res)]
            [soln (result-soln-vec res)]
            [points (result-pts-vec res)])
       (dotimes (i len)
-               (printf "~ninput(s): ~A" (first (list-ref inputs i)))
-               (printf "\t\t~A" (list-ref soln i))
-               (printf "\t\t~A" (list-ref results i))
-               (printf "\t\t~A" (list-ref points i))
-               )
+               (printf "~ninput(s): ~A"
+                       (substringy (first (list-ref inputs i)) 10))
+               (printf "  ~A" (substringy (list-ref soln i) 15))
+               (printf "  ~A" (substringy (list-ref results i) 15))
+               (printf "  ~A" (substringy (list-ref points i) 15)))
       (printf "~n-------------------~n")
       (printf "SUBTOTAL: ~A~n" (sumlist points))
       (printf "-------------------~n"))))
@@ -113,7 +113,7 @@
 
 ; (define funcs '(facty abs list-to-veck))
 ; (eval (list 'define (first funcs) #f))
-    ;;-----------------------------------------------------;;
+;;-----------------------------------------------------;;
 
 (define reset-global
   (lambda ()
